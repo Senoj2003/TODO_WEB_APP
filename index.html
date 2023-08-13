@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo Web App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        main {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .task-input {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+
+        .task-input input[type="text"] {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        .task-input button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .task-input button:hover {
+            background-color: #555;
+        }
+
+        #task-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .task {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            margin-bottom: 0.5rem;
+            background-color: #f9f9f9;
+        }
+
+        .task.completed {
+            background-color: #e0e0e0;
+        }
+
+        .task .task-text {
+            flex: 1;
+        }
+
+        .task .task-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .task .task-actions button {
+            background-color: #dd3d32;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            padding: 0.2rem 0.5rem;
+            margin-right: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .task .task-actions button.completed-btn {
+            background-color: #4caf50;
+        }
+
+        .message {
+            display: block;
+            background-color: #4caf50;
+            color: #fff;
+            text-align: center;
+            padding: 0.5rem;
+            margin-top: 1rem;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>ToDo App</h1>
+    </header>
+    <main>
+        <div class="task-input">
+            <input type="text" id="task" placeholder="Enter a new task">
+            <button id="add-task">Add Task</button>
+        </div>
+        <ul id="task-list">
+            <!-- Tasks will be added dynamically here -->
+        </ul>
+    </main>
+    <script>
+        const taskInput = document.getElementById("task");
+        const addTaskButton = document.getElementById("add-task");
+        const taskList = document.getElementById("task-list");
+
+        addTaskButton.addEventListener("click", addTask);
+
+        function addTask() {
+            const taskText = taskInput.value.trim();
+            if (taskText !== "") {
+                const taskItem = createTaskItem(taskText);
+                taskList.appendChild(taskItem);
+                taskInput.value = "";
+            }
+        }
+
+        function createTaskItem(text) {
+            const taskItem = document.createElement("li");
+            taskItem.className = "task";
+            taskItem.innerHTML = `
+                <div class="task-text">${text}</div>
+                <div class="task-actions">
+                    <button class="complete-btn">Complete</button>
+                    <button class="delete-btn">Delete</button>
+                </div>
+            `;
+
+            const completeButton = taskItem.querySelector(".complete-btn");
+            const deleteButton = taskItem.querySelector(".delete-btn");
+
+            completeButton.addEventListener("click", () => {
+                taskItem.classList.toggle("completed");
+                completeButton.innerHTML = "&#10003;";
+                completeButton.classList.add("completed-btn");
+                displayMessage("Task completed!");
+            });
+
+            deleteButton.addEventListener("click", () => {
+                taskItem.remove();
+            });
+
+            return taskItem;
+        }
+
+        function displayMessage(message) {
+            const messageDiv = document.createElement("div");
+            messageDiv.className = "message";
+            messageDiv.textContent = message;
+
+            const main = document.querySelector("main");
+            main.appendChild(messageDiv);
+
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
